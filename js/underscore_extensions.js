@@ -1,14 +1,14 @@
 
 _.mixin({
 	log: function(msg){
-		if(typeof(exports) !== undefined){
+		if(typeof(exports) !== 'undefined'){
 			sys.debug(msg);
 		}else{
 			if(window.console && window.console.log) console.log(msg);
 		}
 	},
 	errout: function(msg){
-		if(typeof(exports) !== undefined){
+		if(typeof(exports) !== 'undefined'){
 			sys.debug(msg);
 			sys.debug(new Error().stack);
 			throw msg;
@@ -21,6 +21,11 @@ _.mixin({
 		var i = list.indexOf(value);
 		if(i === -1) _.errout('list does not contain value: ' + value);
 		list.splice(i, 1);
+	},
+	removeAll: function(list, otherList){
+		return _.filter(list, function(v){
+			return otherList.indexOf(v) === -1;
+		});
 	},
 	latch: function(count, millisecondsUntilFailure, doneCb, failureCb){
 		var counter = count;
@@ -73,15 +78,23 @@ _.mixin({
 	},
 	assertEqual: function(a, b){
 		if(a !== b){
-			if(typeof(exports) !== undefined){
+			if(typeof(exports) !== 'undefined'){
 				_.errout('Values should be equal, but are not: ' + sys.inspect(a) + ', ' + sys.inspect(b));
 			}else{
 				_.errout('Values should be equal, but are not: ' + a.toString() + ', ' + b.toString());
 			}
 		}
 	},
-	
-	//Use to descend into a json object without having to check for attributes on each descent.
+	assertArray: function(v){
+		if(!(v instanceof Array)){
+			_.errout('Expected Array, got ' + typeof(v) + ': ' + v);
+		}
+	},	
+	assertNumber: function(v){
+		if(typeof(v) !== 'number'){
+			_.errout('Expected Number, got ' + typeof(v) + ': ' + v);
+		}
+	},		//Use to descend into a json object without having to check for attributes on each descent.
 	//For example: the expression obj.a.b.c will be fine if obj = {a: {b: {c: 'blah'}}}, but throw an exception if obj = {}.
 	//Using maybe(obj, 'a', 'b', 'c') will return undefined in the second case.
 	maybe: function(obj){
