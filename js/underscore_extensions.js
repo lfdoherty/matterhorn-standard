@@ -1,21 +1,15 @@
 
+//#requires underscore/underscore
+
+function log(msg){
+	if(window.console && window.console.log) console.log(msg);
+}
+	
 _.mixin({
-	log: function(msg){
-		if(typeof(exports) !== 'undefined'){
-			sys.debug(msg);
-		}else{
-			if(window.console && window.console.log) console.log(msg);
-		}
-	},
+	log: log,
 	errout: function(msg){
-		if(typeof(exports) !== 'undefined'){
-			sys.debug(msg);
-			sys.debug(new Error().stack);
-			throw msg;
-		}else{
-			_.log(msg);
-			throw msg;
-		}
+		log(msg);
+		throw msg;
 	},
 	remove: function(list, value){
 		var i = list.indexOf(value);
@@ -55,6 +49,16 @@ _.mixin({
 			}		
 		}
 	},
+	assert: function(v){
+		if(!v){
+			_.errout('assertion failed');
+		}
+	},
+	assertNot: function(v){
+		if(v){
+			_.errout('assertion failed');
+		}
+	},
 	assertLength: function(arr, len, msg){
 		if(arr.length !== len){
 			var m = msg || 'Expected ' + len + ' values, but instead there are ' + arr.length;
@@ -69,6 +73,11 @@ _.mixin({
 	assertObject: function(v){
 		if(typeof(v) !== 'object'){
 			_.errout('Expected object, got ' + typeof(v) + ': ' + v);
+		}
+	},
+	assertBoolean: function(v){
+		if(v !== true && v !== false){
+			_.errout('Expected boolean, got ' + typeof(v) + ': ' + v);
 		}
 	},
 	assertFunction: function(v){
@@ -94,7 +103,45 @@ _.mixin({
 		if(typeof(v) !== 'number'){
 			_.errout('Expected Number, got ' + typeof(v) + ': ' + v);
 		}
-	},		//Use to descend into a json object without having to check for attributes on each descent.
+		if(isNaN(v)) _.errout('value is NaN');
+	},	
+	assertInt: function(v){
+		if(typeof(v) !== 'number'){
+			_.errout('Expected integer, got ' + typeof(v) + ': ' + v);
+		}
+		if((v>>0) !== v){
+			_.errout('value ' + v + ' is not the same as its integer conversion ' + (v>>0) + ' - expected integer.');
+		}
+	},
+	assertPrimitive: function(v){
+		if(_.isArray(v) || _.isObject(v)){
+			_.errout('expected primitive, got ' + typeof(v) + ': ' + v);
+		}
+	},
+	assertDefined: function(v){
+		if(v === undefined){
+			_.errout('value is undefined');
+		}
+	},
+	assertUndefined: function(v){
+		if(v !== undefined){
+			_.errout('value should be undefined');
+		}
+	},
+	isObject: function(v){
+		return !_.isArray(v) && typeof(v) === 'object';
+	},
+	isInteger: function(v){
+		return typeof(v) === 'number' && (v>>0) === v;
+	},
+	isIn: function(arr, value){
+		_.assertArray(arr);
+		return arr.indexOf(value) !== -1;
+	},
+	isPrimitive: function(v){
+		return !_.isArray(v) && !_.isObject(v);
+	},
+	//Use to descend into a json object without having to check for attributes on each descent.
 	//For example: the expression obj.a.b.c will be fine if obj = {a: {b: {c: 'blah'}}}, but throw an exception if obj = {}.
 	//Using maybe(obj, 'a', 'b', 'c') will return undefined in the second case.
 	maybe: function(obj){

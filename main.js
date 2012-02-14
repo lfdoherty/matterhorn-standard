@@ -2,47 +2,75 @@
 exports.dir = __dirname;
 exports.name = 'matterhorn-standard';
 
-app.js(exports,'dust', ['dust/dust-core-0.3.0.min']);
-secureApp.js(exports,'dust', ['dust/dust-core-0.3.0.min']);
+require('matterhorn');
 
-app.js(exports,'jquery-1.5', ['jquery/jquery-1.5.1']);
-secureApp.js(exports,'jquery-1.5', ['jquery/jquery-1.5.1']);
+app.js(exports,'dust', 'dust/dust-core-0.3.0.min');
+secureApp.js(exports,'dust', 'dust/dust-core-0.3.0.min');
 
-app.js(exports,'prng', ['seedrandom/seedrandom', 'random']);
-secureApp.js(exports,'prng', ['seedrandom/seedrandom', 'random']);
+app.js(exports,'jquery-1.5', 'jquery/jquery-1.5.1');
+secureApp.js(exports,'jquery-1.5', 'jquery/jquery-1.5.1');
+
+app.js(exports,'jquery', 'jquery/jquery-1.5.1');
+secureApp.js(exports,'jquery', 'jquery/jquery-1.5.1');
+
+app.js(exports,'prng', 'random');
+secureApp.js(exports,'prng', 'random');
 
 var r = require('./js/random');
 
 exports.random = r;
 
-app.js(exports,'qtip', ['qtip/jquery.qtip']);
-secureApp.js(exports,'qtip', ['qtip/jquery.qtip']);
+function makeBothExported(pathPrefix, name){
+	app.js(exports, name, pathPrefix+name);
+	secureApp.js(exports, name, pathPrefix+name);
+}
 
-app.css(exports,'qtip', ['qtip/jquery.qtip']);
-secureApp.css(exports,'qtip', ['qtip/jquery.qtip']);
+makeBothExported('qtip/jquery.', 'qtip');
 
-app.js(exports,'underscorem', ['underscore/underscore','underscore_extensions']);
-secureApp.js(exports,'underscorem', ['underscore/underscore','underscore_extensions']);
+app.css(exports,'qtip', 'qtip/jquery.qtip');
+secureApp.css(exports,'qtip', 'qtip/jquery.qtip');
 
-app.js(exports, 'ajax', ['pollsave']);
-secureApp.js(exports, 'ajax', ['pollsave']);
+app.js(exports,'underscorem', 'underscore_extensions');
+secureApp.js(exports,'underscorem', 'underscore_extensions');
+
+app.js(exports, 'ajax', 'pollsave');
+secureApp.js(exports, 'ajax', 'pollsave');
 
 
-app.js(exports, 'browser-standardization', ['standardization']);
-secureApp.js(exports, 'browser-standardization', ['standardization']);
+app.js(exports, 'browser-standardization', 'standardization');
+secureApp.js(exports, 'browser-standardization', 'standardization');
 
-app.js(exports, 'date', ['date']);
-secureApp.js(exports, 'date', ['date']);
+makeBothExported('', 'date');
+makeBothExported('', 'keys');
 
+makeBothExported('raphael/', 'raphael');
+makeBothExported('raphael/', 'g.raphael');
+makeBothExported('raphael/', 'g.line');
+makeBothExported('raphael/', 'g.dot');
+makeBothExported('raphael/', 'g.pie');
+makeBothExported('raphael/', 'g.bar');
 
 
 var _ = require('underscorem');
 
-app.js(exports, 'pagesave', ['save']);
-secureApp.js(exports, 'pagesave', ['save']);
+app.js(exports, 'pagesave', 'save');
+secureApp.js(exports, 'pagesave', 'save');
 
 var url = require('url');
 var request = require('request');
+
+app.js(exports, 'echofile', 'echofile');
+
+app.post(exports, '/echofile/:filename', function(req, res){
+
+	var content = req.body.content;
+	var type = req.body.type;
+	
+	res.send(content, {
+		'Content-Disposition': 'attachment',
+		'Content-Type': type
+	});	
+});
 
 app.post(exports, '/savepage/:filename', function(req, res){
 	
@@ -89,37 +117,7 @@ app.post(exports, '/savepage/:filename', function(req, res){
 			scriptsContent[scriptUrl] = body;
 			cdl();
 						
-		});
-		
-		/*var u = url.parse(scriptUrl);
-		
-		var options = {
-			host: u.hostname,
-			port: u.port,
-			path: u.pathname + (u.search || '')
-		};
-		
-		
-		console.log(options);
-		
-		http.get(options, function(res){
-		
-			console.log('got reply: ' + res.url);
-		
-			var data = '';
-			res.on('data', function (chunk) {
-				console.log('got data: ' + chunk);
-				data += chunk;
-			});
-			
-			res.on('end', function(){
-				console.log('ending: ' + data);
-				scriptsContent[scriptUrl] = data;
-				cdl();
-			});
-		});	*/	
+		});		
 	});
-	
-	
 });
 

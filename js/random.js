@@ -1,4 +1,6 @@
 
+//#requires seedrandom/seedrandom
+
 var makeUid;
 
 (function(){
