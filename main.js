@@ -1,9 +1,10 @@
 
-exports.dir = __dirname;
+//exports.dir = __dirname;
 exports.name = 'matterhorn-standard';
+exports.module = module
 
 require('matterhorn');
-
+/*
 app.js(exports,'dust', 'dust/dust-core-0.3.0.min');
 secureApp.js(exports,'dust', 'dust/dust-core-0.3.0.min');
 
@@ -13,13 +14,22 @@ secureApp.js(exports,'jquery-1.5', 'jquery/jquery-1.5.1');
 app.js(exports,'jquery', 'jquery/jquery-1.5.1');
 secureApp.js(exports,'jquery', 'jquery/jquery-1.5.1');
 
+app.js(exports,'tinydom', 'tinydom');
+secureApp.js(exports,'tinydom', 'tinydom');
+
+app.js(exports,'domready', 'domready');
+secureApp.js(exports,'domready', 'domready');
+
 app.js(exports,'prng', 'random');
 secureApp.js(exports,'prng', 'random');
 
+app.js(exports,'native', 'native');
+secureApp.js(exports,'native', 'native');
+*/
 var r = require('./js/random');
 
 exports.random = r;
-
+/*
 function makeBothExported(pathPrefix, name){
 	app.js(exports, name, pathPrefix+name);
 	secureApp.js(exports, name, pathPrefix+name);
@@ -50,17 +60,17 @@ makeBothExported('raphael/', 'g.dot');
 makeBothExported('raphael/', 'g.pie');
 makeBothExported('raphael/', 'g.bar');
 
-
+*/
 var _ = require('underscorem');
-
+/*
 app.js(exports, 'pagesave', 'save');
 secureApp.js(exports, 'pagesave', 'save');
-
+*/
 var url = require('url');
 var request = require('request');
-
+/*
 app.js(exports, 'echofile', 'echofile');
-
+*/
 app.post(exports, '/echofile/:filename', function(req, res){
 
 	var content = req.body.content;

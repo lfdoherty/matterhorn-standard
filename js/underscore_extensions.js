@@ -90,7 +90,7 @@ _.mixin({
 			if(typeof(exports) !== 'undefined'){
 				_.errout('Values should be equal, but are not: ' + sys.inspect(a) + ', ' + sys.inspect(b));
 			}else{
-				_.errout('Values should be equal, but are not: ' + a.toString() + ', ' + b.toString());
+				_.errout('Values should be equal, but are not: ' + (a!=undefined?a.toString():a) + ', ' + (b!=undefined?b.toString():b));
 			}
 		}
 	},
@@ -134,12 +134,22 @@ _.mixin({
 	isInteger: function(v){
 		return typeof(v) === 'number' && (v>>0) === v;
 	},
+	isInt: function(v){
+		return typeof(v) === 'number' && (v>>0) === v;
+	},
 	isIn: function(arr, value){
 		_.assertArray(arr);
 		return arr.indexOf(value) !== -1;
 	},
 	isPrimitive: function(v){
 		return !_.isArray(v) && !_.isObject(v);
+	},
+	sameArray: function(a,b){
+		if(a.length !== b.length) return false;
+		for(var i=0;i<a.length;++i){
+			if(a[i] !== b[i]) return false;
+		}
+		return true;
 	},
 	//Use to descend into a json object without having to check for attributes on each descent.
 	//For example: the expression obj.a.b.c will be fine if obj = {a: {b: {c: 'blah'}}}, but throw an exception if obj = {}.
