@@ -85,7 +85,7 @@ function pollsave(json, uri, delay, successCallback, failureCallback){
 					}
 				}
 			}
-			jQuery.ajax({
+			/*jQuery.ajax({
 				type: 'POST',
 				url: uri,
 				accepts: 'application/json; charset=utf-8',
@@ -94,8 +94,49 @@ function pollsave(json, uri, delay, successCallback, failureCallback){
 				success: loadCallback,
 				error: errorCallback,
 				processData: false
-			});
+			});*/
+			
+			var xhr = new XMLHttpRequest();    
+			//console.log('uri: ' + uri) 
+			//console.log('href: ' + window.location.href)
+			xhr.open("POST", uri, true);
+			xhr.setRequestHeader('Content-Type', 'application/json');
+			xhr.setRequestHeader('Accepts', 'application/json; charset=utf-8');
+			xhr.onreadystatechange = function (oEvent) {  
+				if (xhr.readyState === 4) {  
+					if (xhr.status === 200) {
+						var json = JSON.parse(xhr.responseText) 
+						loadCallback(json)
+					} else {  
+						console.log("Error", xhr.statusText, uri);  
+						if(errorCallback) errorCallback(xhr.status, xhr.statusText)
+					}  
+				}  
+			};  
+			xhr.send(JSON.stringify(json)); 
 		}
 	}	
+}
+
+function postJson(url, content, cb, errCb){
+	if(arguments.length !== 3 && arguments.length !== 4) throw new Error('postJson(url,content,cb[,errCb]) should not be called with ' + arguments.length + ' arguments')
+
+    var xhr = new XMLHttpRequest();  
+    
+   // console.log('postJson: ' + url)
+    
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function (oEvent) {  
+		if (xhr.readyState === 4) {  
+			if (xhr.status === 200) {  
+				cb()
+			} else {  
+				console.log("Error", xhr.statusText, url);  
+				if(errCb) errCb(xhr.status, xhr.statusText)
+			}  
+		}  
+	};  
+	xhr.send(JSON.stringify(content)); 
 }
 

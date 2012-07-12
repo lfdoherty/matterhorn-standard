@@ -1,16 +1,9 @@
-
-//#requires seedrandom/seedrandom
-
 var makeUid;
-
-(function(){
 
 var random;
 
-if(typeof(exports) !== 'undefined'){
-	require('./seedrandom/seedrandom');
-}else{
-}
+require('./seedrandom/seedrandom');
+
 random = function(){return Math.floor(Math.random()*2147483648);}
 
 var base64Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_=";
@@ -101,7 +94,5 @@ if(typeof(exports) !== 'undefined'){
 	exports.alpha = randomAlpha;
 	exports.base64 = randomBase64;
 }
-
-})();
 
 
