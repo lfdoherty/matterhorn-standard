@@ -1,13 +1,9 @@
 
-require('./jquery')
-
-if($ && $.noConflict){
-	$.noConflict();
-}
 
 /*
 pollsave assumes RESTian PUT semantics for URIs - that it will never be asked to save multiple different resources to the same URI.
 */
+
 
 var after = {},
 	saving = {},
@@ -85,19 +81,9 @@ function pollsave(json, uri, delay, successCallback, failureCallback){
 					}
 				}
 			}
-			/*jQuery.ajax({
-				type: 'POST',
-				url: uri,
-				accepts: 'application/json; charset=utf-8',
-				contentType: 'application/json',
-				data: JSON.stringify(json),
-				success: loadCallback,
-				error: errorCallback,
-				processData: false
-			});*/
 			
 			var xhr = new XMLHttpRequest();    
-			//console.log('uri: ' + uri) 
+			console.log('uri: ' + uri) 
 			//console.log('href: ' + window.location.href)
 			xhr.open("POST", uri, true);
 			xhr.setRequestHeader('Content-Type', 'application/json');
@@ -123,7 +109,7 @@ function postJson(url, content, cb, errCb){
 
     var xhr = new XMLHttpRequest();  
     
-   // console.log('postJson: ' + url)
+    console.log('postJson: ' + url)
     
     xhr.open("POST", url, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
