@@ -1,6 +1,6 @@
 {
 	"name": "matterhorn-standard",
-	"version": "0.2.1",
+	"version": "0.2.2",
 	"description": "Matterhorn wrapper for a set of common third-party libraries, with some extensions and utilities.",
 	"author": "Liam Doherty",
 	"main": "main",

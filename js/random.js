@@ -2,6 +2,8 @@ var makeUid;
 
 var random;
 
+exports.module = module
+
 require('./seedrandom/seedrandom');
 
 random = function(){return Math.floor(Math.random()*2147483648);}
@@ -89,7 +91,7 @@ function randomAlpha(many, chars){
 
 if(typeof(exports) !== 'undefined'){
 	exports.make = makeUid;
-
+	exports.module = module
 	exports.uid = makeUid;
 	exports.alpha = randomAlpha;
 	exports.base64 = randomBase64;
